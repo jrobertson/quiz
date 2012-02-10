@@ -71,52 +71,22 @@ the answer was continent
 you scored 33%
 </pre>
 
-The quiz gem accepts XML input either as a string, a local file, or URL. Here's the XML file layout I originally used:
+The quiz gem accepts XML input either as a string, a local file, or URL. I've updated the code to allow a block to control how the user interacts with the quiz e.g.
 
-<pre>
-<questions>
-  <q>
-    <question>  What city is the capital of scotland?         </question>
-    <options>
-      <option>  Edinburgh  </option>
-      <option>  Glasgow    </option>
-      <option>  Aberdeen   </option>
-      <option>  Oban       </option>
-    </options>
-    <answer>    Edinburgh  </answer>
-  </q>
-  <q>
-    <question>  Who is the first minister of Scotland?   </question>
-    <options>
-      <option>  Henry McLeish    </option>
-      <option>  Simon Dunsmore   </option>
-      <option>  Alex Salmond     </option>
-      <option>  Kenny MacAskell  </option>
-    </options>
-    <answer>    Alex Salmond     </answer>
-  </q>
-  <q>
-    <question>  Who is the Cabinet Secretary for Justice in Scotland?   </question>
-    <options>
-      <option>  Henry McLeish    </option>
-      <option>  Simon Dunsmore   </option>
-      <option>  Alex Salmond     </option>
-      <option>  Kenny MacAskell  </option>
-    </options>
-    <answer>    Kenny MacAskell  </answer>
-  </q>  
-  <q>
-    <question>  Who invented the televsion?   </question>
-    <options>
-      <option>  Philo Taylor Farnsworth   </option>
-      <option>  Thomas Edison             </option>
-      <option>  John Logie Baird          </option>
-      <option>  Alexander Graham Bell     </option>
-    </options>
-    <answer>    John Logie Baird  </answer>
-  </q>  
-</questions>
-</pre>
+    quiz = Quiz.new(RXFHelper.read(RowX.new(entries).to_xml))
+    quiz.start do |question, q_options, answers, answer|
+      puts question + "\nis it ... \n" + q_options.join("\n")
+      
+      student_answer = gets.chop; redo unless answers.keys.include? student_answer
+      
+      result = answers[student_answer] == answer
+      reply = result ? '* correct *' : 'the answer was ' + answer
+      puts reply
+      result
+    end
+    puts quiz.score
+
+
 
 ## Resources
 
