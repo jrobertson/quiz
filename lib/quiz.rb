@@ -4,21 +4,37 @@
 
 require 'rxfhelper'
 require 'rexml/document'
+require 'rowx'
 
 class Quiz
   include REXML
 
   def initialize(x)
-    @doc = Document.new(RXFHelper.read(x))
+
+    s, type = RXFHelper.read(x)
+        
+    xml = case type
+    when :xml then
+      s
+    when :unknown
+      lines = s.strip.lines
+      title = lines.first
+      title.prepend 'title: ' unless title =~ /^title:/
+      RowX.new(lines.join).to_xml
+    end
+    
+    @doc = Document.new(xml)
+    
   end
 
-  def start(n=3)
+  def start(n=3, return_score: true)
 
     nodes = XPath.match(@doc.root, '*[question]')
     list = (0...nodes.length).to_a.sample(n)
     questions = nodes.values_at(*list)
 
     @results = questions.map do |q|
+
       question, answer = q.text('question').strip, q.text('answer').strip
       *options = XPath.match(q,'./options//option/text()').sort{rand}
       a_options = options.length.times.map {|x| (97 + x).chr }.\
@@ -39,6 +55,8 @@ class Quiz
       end
       result
     end
+    
+    score() if return_score
   end
   
   def score()
