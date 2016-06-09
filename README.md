@@ -1,8 +1,5 @@
 # Introducing the quiz gem
 
-Here's a quick example
-
-    require 'rowx'
     require 'quiz'
 
     txt =<<EOF
@@ -42,7 +39,7 @@ Here's a quick example
 
     EOF
 
-    puts Quiz.new(RowX.new(txt).to_xml).start 
+    puts Quiz.new(txt).start 
 
 Here's the interactive ruby session output
 <pre>
@@ -71,24 +68,55 @@ the answer was continent
 you scored 33%
 </pre>
 
-The quiz gem accepts XML input either as a string, a local file, or URL. I've updated the code to allow a block to control how the user interacts with the quiz e.g.
+The quiz gem accepts XML input either as a string, a local file, or URL. Here's the XML file layout I originally used:
 
-    quiz = Quiz.new(RXFHelper.read(RowX.new(entries).to_xml))
-    quiz.start do |question, q_options, answers, answer|
-      puts question + "\nis it ... \n" + q_options.join("\n")
-      
-      student_answer = gets.chop; redo unless answers.keys.include? student_answer
-      
-      result = answers[student_answer] == answer
-      reply = result ? '* correct *' : 'the answer was ' + answer
-      puts reply
-      result
-    end
-    puts quiz.score
-
-
+<pre>
+&lt;questions&gt;
+  &lt;q&gt;
+    &lt;question&gt;  What city is the capital of scotland?         &lt;/question&gt;
+    &lt;options&gt;
+      &lt;option&gt;  Edinburgh  &lt;/option&gt;
+      &lt;option&gt;  Glasgow    &lt;/option&gt;
+      &lt;option&gt;  Aberdeen   &lt;/option&gt;
+      &lt;option&gt;  Oban       &lt;/option&gt;
+    &lt;/options&gt;
+    &lt;answer&gt;    Edinburgh  &lt;/answer&gt;
+  &lt;/q&gt;
+  &lt;q&gt;
+    &lt;question&gt;  Who is the first minister of Scotland?   &lt;/question&gt;
+    &lt;options&gt;
+      &lt;option&gt;  Henry McLeish    &lt;/option&gt;
+      &lt;option&gt;  Simon Dunsmore   &lt;/option&gt;
+      &lt;option&gt;  Alex Salmond     &lt;/option&gt;
+      &lt;option&gt;  Kenny MacAskell  &lt;/option&gt;
+    &lt;/options&gt;
+    &lt;answer&gt;    Alex Salmond     &lt;/answer&gt;
+  &lt;/q&gt;
+  &lt;q&gt;
+    &lt;question&gt;  Who is the Cabinet Secretary for Justice in Scotland?   &lt;/question&gt;
+    &lt;options&gt;
+      &lt;option&gt;  Henry McLeish    &lt;/option&gt;
+      &lt;option&gt;  Simon Dunsmore   &lt;/option&gt;
+      &lt;option&gt;  Alex Salmond     &lt;/option&gt;
+      &lt;option&gt;  Kenny MacAskell  &lt;/option&gt;
+    &lt;/options&gt;
+    &lt;answer&gt;    Kenny MacAskell  &lt;/answer&gt;
+  &lt;/q&gt;  
+  &lt;q&gt;
+    &lt;question&gt;  Who invented the televsion?   &lt;/question&gt;
+    &lt;options&gt;
+      &lt;option&gt;  Philo Taylor Farnsworth   &lt;/option&gt;
+      &lt;option&gt;  Thomas Edison             &lt;/option&gt;
+      &lt;option&gt;  John Logie Baird          &lt;/option&gt;
+      &lt;option&gt;  Alexander Graham Bell     &lt;/option&gt;
+    &lt;/options&gt;
+    &lt;answer&gt;    John Logie Baird  &lt;/answer&gt;
+  &lt;/q&gt;  
+&lt;/questions&gt;
+</pre>
 
 ## Resources
 
-* [jrobertson/quiz - GitHub](https://github.com/jrobertson/quiz)
+* jrobertson/quiz https://github.com/jrobertson/quiz
 
+quiz gem xml rowx
