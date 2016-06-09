@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = 'quiz'
-  s.version = '0.2.0'
+  s.version = '0.2.1'
   s.summary = 'quiz'
   s.authors = ['James Robertson']
   s.files = Dir['lib/quiz.rb'] 

@@ -12,17 +12,19 @@ class Quiz
   def initialize(x)
 
     s, type = RXFHelper.read(x)
-        
-    xml = case type
+
+    xml = case type    
     when :xml then
       s
     when :unknown
-      lines = s.strip.lines
-      title = lines.first
-      title.prepend 'title: ' unless title =~ /^title:/
-      RowX.new(lines.join).to_xml
+      parse_rowx(s)
+    when :file
+      
+      # is it a loose RowX document or is it XML?
+      s[0] == '<' ? s : parse_rowx(s)
+      
     end
-    
+
     @doc = Document.new(xml)
     
   end
@@ -64,5 +66,16 @@ class Quiz
     percent = 100 / (@results.size / tally.to_f)
     your_score = "you scored %s%" % percent.to_i
 
+  end
+  
+  private
+  
+  def parse_rowx(s)
+    
+    lines = s.strip.lines
+    title = lines.first
+    title.prepend 'title: ' unless title =~ /^title:/
+    RowX.new(lines.join).to_xml
+    
   end
 end
